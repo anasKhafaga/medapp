@@ -1,7 +1,7 @@
 const { checkSchema } = require('express-validator');
 const { User } = require('../models/User');
 
-exports.checkUser = checkSchema({
+module.exports.checkUser = checkSchema({
   username: {
     in: 'body',
     trim: true,

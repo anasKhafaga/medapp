@@ -1,35 +1,41 @@
-const Post = require('./models/Post/Post')
-const Tag = require('./models/Post/Tag')
-
+// require modules
 const createError = require('http-errors');
 const express = require('express');
 const helm = require('helmet');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const bp = require('body-parser');
+const keys = require('./keys');
 
+// require routes
 const authRouter = require('./routes/authR');
 const comRouter = require('./routes/commR');
 
+// start express app
 const app = express();
 
+// helmet middleware
 app.use(helm());
 
-mongoose.connect('mongodb://localhost:27017/eman', { useFindAndModify: false });
+// connect database
+mongoose.connect(keys.dbURI, { useFindAndModify: false });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
+// logger
 app.use(logger('dev'));
-app.use(express.json());
+
+// passport middleware
 app.use(passport.initialize());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// body parser
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: false }));
+
+// serve puplic folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// handle routes
 app.use('/', authRouter);
 app.use('/community', comRouter);
 
@@ -46,7 +52,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    error: 'Something went wrong'
+  });
 });
 
 module.exports = app;

@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
+  "name": "medapp",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,13 +7,12 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cookie-parser": "~1.4.4",
+    "body-parser": "^1.19.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-validator": "^6.4.0",
     "helmet": "^3.21.2",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.8.11",
@@ -27,6 +26,7 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "constantinople": "^4.0.1",
     "nodemon": "^2.0.2"
   }
 }

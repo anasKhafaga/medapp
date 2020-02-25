@@ -2,7 +2,6 @@ const { User } = require('../../models/User');
 const Follower = require('../../models/follow/Follower');
 const Following = require('../../models/follow/Following');
 
-// don't forget to change req.body.userId >> req.userId
 
 module.exports.follow = async (req, res, next) => {
   let followingId;
@@ -11,18 +10,16 @@ module.exports.follow = async (req, res, next) => {
     .populate('followers')
     .exec()
     .then(user => {
-      console.log('followers', user.followers);
       if (!user) {
         return res.json({
           error: "This user doesn't exist"
         });
       }
-      console.log(user);
       followingId = user._id;
 
       if (user.followers) {
         Follower.findOne(
-          { userId: user._id, followerId: req.body.userId },
+          { userId: user._id, followerId: req.userId },
           (err, follower) => {
             if (err) {
               return next(error);
@@ -30,11 +27,11 @@ module.exports.follow = async (req, res, next) => {
             if (!follower) {
               Follower.create({
                 userId: user._id,
-                followerId: req.body.userId
+                followerId: req.userId
               }).catch(err => next(error));
             } else {
               Follower.deleteOne(
-                { userId: user._id, followerId: req.body.userId },
+                { userId: user._id, followerId: req.userId },
                 err => {
                   if (err) {
                     return next(error);
@@ -47,7 +44,7 @@ module.exports.follow = async (req, res, next) => {
       } else {
         Follower.create({
           userId: user._id,
-          followerId: req.body.userId
+          followerId: req.userId
         });
       }
     })
@@ -55,13 +52,10 @@ module.exports.follow = async (req, res, next) => {
       const errr = new Error('Oops! something went wrong.');
       return next(errr);
     });
-  User.findOne({ _id: req.body.userId })
+  User.findOne({ _id: req.userId })
     .populate('followings')
     .exec()
     .then(user => {
-      console.log(user);
-      console.log('user.followings: ', user.followings);
-      console.log(user._id);
       if (!user) {
         return res.json({
           error: 'Please, log in!'

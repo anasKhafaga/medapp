@@ -3,20 +3,21 @@ const { User } = require('../models/User');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-exports.getLogin = (req, res, next) => {
+
+module.exports.getLogin = (req, res, next) => {
   res.json({
-    wait: 'wait'
+    Success: 'You are successfully logged in'
   });
 };
 
-exports.postLogin = async (req, res, next) => {
+module.exports.postLogin = async (req, res, next) => {
   const test = req.body.test;
   const username = req.body.username;
   const password = req.body.password;
-  console.log(req.body);
+
   if (typeof username !== 'string' || typeof password !== 'string') {
     return res.json({
-      Oops: 'U wanna to hack me'
+      error: 'something went wrong'
     });
   }
   User.findOne({ username: username })
@@ -59,13 +60,13 @@ exports.postLogin = async (req, res, next) => {
     });
 };
 
-exports.getSignup = (req, res, next) => {
+module.exports.getSignup = (req, res, next) => {
   res.json({
     wait: 'wait'
   });
 };
 
-exports.postSignup = (req, res, next) => {
+module.exports.postSignup = (req, res, next) => {
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
     throw new Error(validation.errors[0].msg);
@@ -93,7 +94,7 @@ exports.postSignup = (req, res, next) => {
     });
 };
 
-exports.googleCallback = (req, res, next) => {
+module.exports.googleCallback = (req, res, next) => {
   payLoad = {
     firstName: req.user.firstName,
     _id: req.user._id

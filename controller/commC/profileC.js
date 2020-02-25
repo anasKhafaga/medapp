@@ -6,7 +6,6 @@ module.exports.updateUser = async (req, res, next) => {
   let userPic = req.file;
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    console.log(validation.errors);
     throw new Error(validation.errors[0].msg);
   }
   if (!userPic) {
@@ -48,7 +47,6 @@ module.exports.updateUser = async (req, res, next) => {
 module.exports.updateUserPassword = async (req, res, next) => {
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    console.log(validation.errors);
     throw new Error(validation.errors[0].msg);
   }
   await User.findOneAndUpdate(

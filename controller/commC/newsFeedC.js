@@ -14,10 +14,10 @@ module.exports.createPost = async(req, res, next) => {
     throw new Error(validation.errors[0].msg);
   }
   if (post.refrence) {
-    refs = post.refrence.toString().split(' ')
+    refs = post.refrence.split(' ')
   }
   if (post.tags) {
-    tags = post.tags.toString().split(' ') 
+    tags = post.tags.split(' ') 
     await Tag.find({})
       .then((dbTags) => {
         tags.map(tag => {
@@ -39,13 +39,13 @@ module.exports.createPost = async(req, res, next) => {
   }
   if (state) {
     Post.create({
-      category: post.category.toString(),
-      title: post.title.toString(),
-      content: post.content.toString(),
+      category: post.category,
+      title: post.title,
+      content: post.content,
       media: media,
       tags: tags,
-      privacy: post.privacy.toString(),
-      author: post.userId,
+      privacy: post.privacy,
+      author: req.userId,
       refrence: refs
     })
       .then(cPost => {
@@ -61,5 +61,3 @@ module.exports.createPost = async(req, res, next) => {
     next(error)
   }
 }
-
-// don't forget post.userId >> req.userId
